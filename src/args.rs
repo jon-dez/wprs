@@ -237,6 +237,15 @@ pub fn title_prefix() -> impl Parser<Option<String>> {
         .optional()
 }
 
+pub fn full_damage() -> impl Parser<Option<bool>> {
+    bpaf::long("full-damage")
+        .argument::<bool>("BOOL")
+        .help(
+            "Ignore the damage regions sent by the other end and damage the whole surface on every frame. Costs compositor repaint work, but works around applications or compositors that disagree about damage tracking.",
+        )
+        .optional()
+}
+
 pub static LOG_PRIV_DATA: AtomicBool = AtomicBool::new(false);
 
 pub fn set_log_priv_data(val: bool) {

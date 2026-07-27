@@ -104,6 +104,8 @@ impl ObjectBimapExt for ObjectBimap {
 
 pub struct ClientOptions {
     pub title_prefix: String,
+    /// Damage the whole surface every frame instead of using received damage.
+    pub full_damage: bool,
 }
 
 pub struct WprsClientState {
@@ -148,6 +150,7 @@ pub struct WprsClientState {
     current_focus: Option<WlSurface>,
 
     title_prefix: String,
+    pub(crate) full_damage: bool,
 
     buffer_cache: Option<UncompressedBufferData>,
 }
@@ -216,6 +219,7 @@ impl WprsClientState {
             last_mouse_down_serial: None,
             current_focus: None,
             title_prefix: options.title_prefix,
+            full_damage: options.full_damage,
             buffer_cache: None,
         })
     }

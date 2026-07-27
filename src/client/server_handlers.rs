@@ -67,6 +67,7 @@ impl WprsClientState {
         surface_id: WlSurfaceId,
         mut surface_state: SurfaceState,
     ) -> Result<()> {
+        let full_damage = self.full_damage;
         let client = self.remote_display.client(&client_id);
         let surfaces = &mut client.surfaces;
 
@@ -110,7 +111,10 @@ impl WprsClientState {
                 .set_opaque_region(surface_state.opaque_region.take(), &self.compositor_state)
                 .location(loc!())?;
 
-            if let Some(mut damage) = surface_state.damage.take() {
+            // A None frame_damage makes the draw paths damage everything.
+            if let Some(mut damage) = surface_state.damage.take()
+                && !full_damage
+            {
                 if let Some(frame_damage) = &mut remote_surface.frame_damage {
                     frame_damage.append(damage.as_mut())
                 } else {
